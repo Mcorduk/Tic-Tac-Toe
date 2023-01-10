@@ -1,6 +1,6 @@
 const gameBoard = (() => {
-  const board = [
-    ["O", "O", "O"],
+  let board = [
+    [null, null, null],
     ["O", "O", "O"],
     ["O", "O", "O"]
   ];
@@ -11,17 +11,17 @@ const gameBoard = (() => {
         let id = `${i}-${j}`;
         let cell = document.getElementById(id);
         cell.innerHTML = board[i][j];
-        cell.addEventListener("click", function() {
-          cell.innerHTML = "X";
-          board[i][j] = "X";
-        });
       }
     }
     return;
   }
 
+  function addMark(i,j){
+    //implementation
+  }
   return {
-    renderBoard
+    renderBoard,
+    addMark,
   };
 })();
 

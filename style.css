@@ -1,0 +1,21 @@
+table{
+  margin: auto;
+}
+table caption{
+  font-size: xx-large;
+}
+
+td{
+  border: 1px solid black;
+  width: 100px;
+  height: 100px;
+  font-size: xx-large;
+}
+
+#regards{
+  margin-top: 20px;
+  display: flex;
+}
+
+#regards i{
+margin-left: auto;}
