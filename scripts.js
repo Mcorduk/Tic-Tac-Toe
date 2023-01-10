@@ -1,6 +1,8 @@
 const ticTacToe = (() => {
+
+  const GameBoard = (() => {
+    //Board Module
   let board = [
-    //Init game
     [null, null, null],
     [null, null, null],
     [null, null, null]
@@ -18,8 +20,14 @@ const ticTacToe = (() => {
         cache[id].innerHTML = board[i][j];
       }
     }
-  }
+  } 
+    return {
+    renderBoard,
+    cache
+    };
 
+  })();
+  
   function addMark(i, j) {
     //Player adds respective symbol
     if (board[i][j] === null) {
@@ -27,11 +35,7 @@ const ticTacToe = (() => {
       cache[`${i}-${j}`].innerHTML = currentPlayer.symbol;
     }
   }
-  return {
-    renderBoard,
-    addMark,
-    cache
-  };
+ 
 })();
 
 
