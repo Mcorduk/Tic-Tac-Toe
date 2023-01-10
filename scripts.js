@@ -1,39 +1,69 @@
-const gameBoard = (() => {
+const ticTacToe = (() => {
   let board = [
+    //Init game
     [null, null, null],
-    ["O", "O", "O"],
-    ["O", "O", "O"]
+    [null, null, null],
+    [null, null, null]
   ];
 
+  let cache = {};
+  //cache DOM elements
   function renderBoard() {
     for (let i = 0; i < board.length; i++) {
       for (let j = 0; j < board[i].length; j++) {
         let id = `${i}-${j}`;
-        let cell = document.getElementById(id);
-        cell.innerHTML = board[i][j];
+        if (!cache[id]) {
+          cache[id] = document.getElementById(id);
+        }
+        cache[id].innerHTML = board[i][j];
       }
     }
-    return;
   }
 
-  function addMark(i,j){
-    //implementation
+  function addMark(i, j) {
+    //Player adds respective symbol
+    if (board[i][j] === null) {
+      board[i][j] = currentPlayer.symbol;
+      cache[`${i}-${j}`].innerHTML = currentPlayer.symbol;
+    }
   }
   return {
     renderBoard,
     addMark,
+    cache
   };
 })();
 
 
-  const createPlayer = (name, symbol) => {
-    return {
-      name,
-      symbol,
+const createPlayer = (name, symbol) => {
+  return {
+    name,
+    symbol,
+  }
+};
+
+const player1 = createPlayer("player1", "X");
+const player2 = createPlayer("player2", "O");
+
+let currentPlayer = player1;
+
+const createCell = (i, j, value) => {
+return {
+  i: i,
+  j: j,
+  value: value,
+  handleClick: function() {
+    if (this.value === "O") {
+      this.value = currentPlayer.symbol;
+      this.element.innerHTML = currentPlayer.symbol;
+      if(currentPlayer === player1)
+          currentPlayer = player2;
+      else
+          currentPlayer = player1;
     }
-  };
-
-
+  }
+};
+};
 
   // gameLogic: game = (() => {
 
