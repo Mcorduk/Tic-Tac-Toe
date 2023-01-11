@@ -1,7 +1,5 @@
 const ticTacToe = (() => {
 
-  let currentPlayer = player1; //Test Player
-  
   const GameBoard = (() => {
     //Board Module
   let board = [
@@ -18,7 +16,7 @@ const ticTacToe = (() => {
         if (!cache[id]) {
           cache[id] = document.getElementById(id);
           cache[id].addEventListener("click", function() {
-            Game.addMark(i, j);
+            Game.addMark(i, j, GameBoard.cache);
           });
         }
         cache[id].innerHTML = board[i][j];
@@ -28,45 +26,95 @@ const ticTacToe = (() => {
     return {
     renderBoard,
     cache,
+    board
     };
   })();
   
-  const Game = (() => {
-    function addMark(i, j) {
+  const Game = ((board) => {
+
+    let gameOver = {state: false};
+    function addMark(i, j, cache) {
+      if (!gameOver.state) {
       if (board[i][j] === null) {
-        board[i][j] = currentPlayer.symbol;
-        cache[`${i}-${j}`].innerHTML = currentPlayer.symbol;
+        board[i][j] = Player.currentPlayer.symbol;
+        cache[`${i}-${j}`].innerHTML = Player.currentPlayer.symbol;
         toggleCurrentPlayer();
         checkForWin();
       }
-    }
+    }else {
+      alert("Game Over, Please refresh the page to play again");
+    } }
     function toggleCurrentPlayer() {
-      currentPlayer = currentPlayer === player1 ? player2 : player1;
+      Player.currentPlayer = Player.currentPlayer === Player.player1 ? Player.player2 : Player.player1;
     }
     function checkForWin() {
-      // Check rows, columns, and diagonals for a win
+      // Check rows for a win
+      for (let i = 0; i < board.length; i++) {
+        if (board[i][0] === Player.currentPlayer.symbol && board[i][1] === Player.currentPlayer.symbol && board[i][2] === Player.currentPlayer.symbol) {
+          alert(`${Player.currentPlayer.name} wins!`);
+          return gameOver.state = true;
+        }
+      }
+      
+      // Check columns for a win
+      for (let i = 0; i < board.length; i++) {
+        if (board[0][i] === Player.currentPlayer.symbol && board[1][i] 
+          === Player.currentPlayer.symbol && board[2][i] === Player.currentPlayer.symbol) {
+          alert(`${Player.currentPlayer.name} wins!`);
+          return gameOver.state = true;
+        }
+      }
+      
+      // Check diagonals for a win
+      if (board[0][0] === Player.currentPlayer.symbol && board[1][1] 
+        === Player.currentPlayer.symbol && board[2][2] === Player.currentPlayer.symbol) {
+        alert(`${Player.currentPlayer.name} wins!`);
+        return gameOver.state = true;
+      }
+      if (board[0][2] === Player.currentPlayer.symbol && board[1][1] 
+        === Player.currentPlayer.symbol && board[2][0] === Player.currentPlayer.symbol) {
+        alert(`${Player.currentPlayer.name} wins!`);
+        return gameOver.state = true;
+      }
+      let filledCells = 0;
+      for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[i].length; j++) {
+          if (board[i][j] !== null) {
+            filledCells++;
+          }
+        }
+      }
+      
+      if (filledCells === 9) {
+        alert("It's a tie!");
+      }
+        
     }
+    const startButton = document.getElementById("start-button");
+    startButton.addEventListener("click", function(){
+      gameOver.state = false;
+      Player.createPlayer("player1","X");
+      Player.createPlayer("player2","O");
+      GameBoard.renderBoard();
+      Game.addMark(GameBoard.cache);
+    });
     return {
       addMark,
     };
-  })();
+  })(GameBoard.board);
 
-  const Player = () => {
-    const createPlayer = (name, symbol) => {
-      //Player Factory
-      return {
-        name,
-        symbol,
-      }
-    };
-    
-    const player1 = createPlayer("player1", "X");
-    const player2 = createPlayer("player2", "O");
-  };
+  const Player = {
+    player1: {},
+    player2: {},
+    currentPlayer: {},
+    createPlayer(name, symbol) {
+    return {name: name, symbol: symbol};
+  }
+};
 
   return {
     GameBoard,
+    Player
+    
   };
 })();
-
-
